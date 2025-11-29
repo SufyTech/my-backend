@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const session = require("express-session");
+const passport = require("passport");
+require("./src/config/passport");
 
 const aiRoutes = require("./src/routes/ai.routes");
 const authRoutes = require("./src/routes/auth.routes");
@@ -30,7 +33,16 @@ app.use("/uploads", express.static("src/uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/ai", aiRoutes);
 app.use("/api", contactRoutes);
+app.use(
+  session({
+    secret: "supersecretkey",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.get("/", (req, res) => res.send("Hello World"));
 
 // ----------------------
