@@ -4,8 +4,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const session = require("express-session");
-const passport = require("passport");
-require("./src/config/passport");
 
 const aiRoutes = require("./src/routes/ai.routes");
 const authRoutes = require("./src/routes/auth.routes");
@@ -15,10 +13,16 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://codemind-ai-eight.vercel.app"
+    ],
     credentials: true,
+    allowedHeaders: ["Authorization", "Content-Type"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
+
 
 app.use(express.json());
 
@@ -41,8 +45,7 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
+
 app.get("/", (req, res) => res.send("Hello World"));
 
 // ----------------------
