@@ -10,13 +10,20 @@ const contactRoutes = require("./src/routes/contact.routes");
 const app = express();
 
 // CORS & JSON middleware - MUST be before routes
+const allowOrigins = [
+  "https://codemind-ai-eight.vercel.app",
+  "http://localhost:3000",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3000", // your frontend
+    origin: allowOrigins,
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
+
 app.use(express.json());
 
 // Routes
