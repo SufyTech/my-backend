@@ -13,18 +13,25 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://codemind-ai-eight.vercel.app"
-    ],
+    origin: ["http://localhost:3000", "https://codemind-ai-eight.vercel.app"],
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
 
-
 app.use(express.json());
+
+// ----------------------
+// Session middleware (IMPORTANT: before routes)
+// ----------------------
+app.use(
+  session({
+    secret: "supersecretkey",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 // ----------------------
 // Serve uploaded avatars
@@ -37,14 +44,6 @@ app.use("/uploads", express.static("src/uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/ai", aiRoutes);
 app.use("/api", contactRoutes);
-app.use(
-  session({
-    secret: "supersecretkey",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
 
 app.get("/", (req, res) => res.send("Hello World"));
 
